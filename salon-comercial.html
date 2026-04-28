@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Salón Comercial – Lomacares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde:      #4a7c59;
+      --verde-claro:#6fa882;
+      --crema:      #f8f3eb;
+      --marron:     #3d2b1f;
+      --marron-med: #7a5c40;
+      --terracota:  #c4703a;
+      --blanco:     #ffffff;
+      --gris-suave: #f0ebe0;
+      --texto:      #2c1f14;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: var(--crema);
+      color: var(--texto);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(61,43,31,0.96);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 40px;
+      height: 68px;
+      box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+    }
+
+    .nav-logo { height: 48px; filter: invert(1) brightness(2); }
+
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: #e8ddd0;
+      text-decoration: none;
+      font-size: 0.92rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active { color: #f5c87a; }
+
+    /* ── HERO ── */
+    .page-hero {
+      margin-top: 68px;
+      background: var(--marron);
+      padding: 60px 40px 48px;
+      text-align: center;
+    }
+
+    .page-hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 5vw, 3rem);
+      color: var(--blanco);
+      margin-bottom: 10px;
+    }
+
+    .page-hero p {
+      color: #c8b89a;
+      font-size: 1.05rem;
+      font-weight: 300;
+    }
+
+    /* ── FILTROS ── */
+    .filtros {
+      background: var(--gris-suave);
+      padding: 20px 40px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      align-items: flex-end;
+      border-bottom: 1px solid #ddd5c5;
+    }
+
+    .filtro-grupo {
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+    }
+
+    .filtro-grupo label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--marron-med);
+    }
+
+    .filtro-grupo select,
+    .filtro-grupo input {
+      padding: 8px 12px;
+      border: 1.5px solid #c8b89a;
+      border-radius: 6px;
+      background: var(--blanco);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.92rem;
+      color: var(--texto);
+      min-width: 150px;
+    }
+
+    .filtro-grupo select:focus,
+    .filtro-grupo input:focus {
+      outline: none;
+      border-color: var(--verde);
+    }
+
+    .btn-limpiar {
+      padding: 8px 18px;
+      background: transparent;
+      border: 1.5px solid var(--marron-med);
+      border-radius: 6px;
+      color: var(--marron-med);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.05em;
+      transition: all 0.2s;
+    }
+
+    .btn-limpiar:hover {
+      background: var(--marron-med);
+      color: var(--blanco);
+    }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 36px 40px 80px;
+    }
+
+    .resultados-info {
+      font-size: 0.88rem;
+      color: var(--marron-med);
+      margin-bottom: 22px;
+    }
+
+    /* ── CARDS ── */
+    .prop-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 28px;
+    }
+
+    .prop-card {
+      background: var(--blanco);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 12px rgba(61,43,31,0.10);
+      transition: transform 0.2s, box-shadow 0.2s;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .prop-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(61,43,31,0.15);
+    }
+
+    /* ── IMAGEN ── */
+    .card-img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .card-img-placeholder {
+      width: 100%;
+      height: 200px;
+      background: linear-gradient(135deg, #e8ddd0 0%, #d4c9b8 100%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #a8937c;
+    }
+
+    .card-img-placeholder svg {
+      width: 40px;
+      height: 40px;
+      opacity: 0.5;
+    }
+
+    .card-img-placeholder span {
+      font-size: 0.78rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      opacity: 0.7;
+    }
+
+    .img-counter { position: relative; }
+
+    .img-counter-badge {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 3px 9px;
+      border-radius: 20px;
+      letter-spacing: 0.04em;
+    }
+
+    /* ── CONTENIDO ── */
+    .card-header {
+      padding: 16px 20px 0;
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .card-tipo {
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--marron-med);
+    }
+
+    .badge-estado {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 10px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge-estado.libre       { background: #d4edda; color: #1a6630; }
+    .badge-estado.a-liberarse { background: #fff3cd; color: #7d5a00; }
+
+    .card-body {
+      padding: 10px 20px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-ubicacion {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--marron);
+      line-height: 1.3;
+    }
+
+    .card-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .card-meta span {
+      font-size: 0.84rem;
+      color: var(--marron-med);
+    }
+
+    .card-descripcion {
+      font-size: 0.88rem;
+      color: #5a4535;
+      line-height: 1.55;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    .card-footer {
+      padding: 14px 20px 18px;
+      border-top: 1px solid var(--gris-suave);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-precio {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--verde);
+    }
+
+    .card-precio span {
+      font-family: 'Lato', sans-serif;
+      font-size: 0.75rem;
+      font-weight: 400;
+      color: var(--marron-med);
+      display: block;
+    }
+
+    .btn-consultar {
+      padding: 8px 18px;
+      background: var(--verde);
+      color: var(--blanco);
+      border: none;
+      border-radius: 6px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.84rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: background 0.2s;
+    }
+
+    .btn-consultar:hover { background: #3a6347; }
+
+    /* ── ESTADOS ── */
+    .estado-carga {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--marron-med);
+      grid-column: 1 / -1;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid #d4c9b8;
+      border-top-color: var(--verde);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 16px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .sin-resultados {
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--marron-med);
+      grid-column: 1 / -1;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 720px) {
+      nav { padding: 0 20px; }
+      .nav-links { gap: 18px; }
+      .nav-links a { font-size: 0.8rem; }
+      .filtros { padding: 16px 20px; }
+      .main { padding: 24px 20px 60px; }
+    }
+
+    @media (max-width: 480px) {
+      .nav-links { display: none; }
+      .prop-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <img class="nav-logo" src="logolomacares.jpeg" alt="Lomacares">
+  <ul class="nav-links">
+    <li><a href="index.html#propiedades">Alquileres Diarios</a></li>
+    <li><a href="index.html#tarifario">Tarifario</a></li>
+    <li><a href="alquileres-mensuales.html">Alquileres Mensuales</a></li>
+    <li><a href="salon-comercial.html" class="active">Salón Comercial</a></li>
+    <li><a href="index.html#formulario">Contacto</a></li>
+  </ul>
+</nav>
+
+<div class="page-hero">
+  <h1>Salón Comercial</h1>
+  <p>Locales comerciales disponibles para alquiler mensual</p>
+</div>
+
+<div class="filtros">
+  <div class="filtro-grupo">
+    <label for="f-estado">Disponibilidad</label>
+    <select id="f-estado">
+      <option value="">Todos los disponibles</option>
+      <option value="Libre">Libre</option>
+      <option value="A Liberarse">A Liberarse</option>
+    </select>
+  </div>
+  <div class="filtro-grupo">
+    <label for="f-ciudad">Ciudad</label>
+    <input id="f-ciudad" type="text" placeholder="Ej: Asunción">
+  </div>
+  <div class="filtro-grupo">
+    <label for="f-m2">M² mínimos</label>
+    <input id="f-m2" type="number" placeholder="Ej: 50" min="1" style="max-width:110px">
+  </div>
+  <button class="btn-limpiar" id="btn-limpiar">Limpiar filtros</button>
+</div>
+
+<div class="main">
+  <p class="resultados-info" id="resultados-info"></p>
+  <div class="prop-grid" id="prop-grid">
+    <div class="estado-carga">
+      <div class="spinner"></div>
+      <p>Cargando locales...</p>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const { createClient } = supabase;
+  const db = createClient(
+    'https://iydvgncngzszljzptljl.supabase.co',
+    'sb_publishable_b5FdnQ07CmEpc8BpxrSaaA__GPhxoS8'
+  );
+
+  const grid  = document.getElementById('prop-grid');
+  const info  = document.getElementById('resultados-info');
+  const fEst  = document.getElementById('f-estado');
+  const fCiud = document.getElementById('f-ciudad');
+  const fM2   = document.getElementById('f-m2');
+
+  function badgeClase(estado) {
+    return estado === 'Libre' ? 'libre' : 'a-liberarse';
+  }
+
+  function formatPrecio(n) {
+    return new Intl.NumberFormat('es-PY').format(n);
+  }
+
+  function renderImagen(imagenes) {
+    if (imagenes && imagenes.length > 0) {
+      const badge = imagenes.length > 1
+        ? `<div class="img-counter-badge">📷 ${imagenes.length}</div>`
+        : '';
+      return `<div class="img-counter">
+        <img class="card-img" src="${imagenes[0]}" alt="Foto del local" loading="lazy">
+        ${badge}
+      </div>`;
+    }
+    return `<div class="card-img-placeholder">
+      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+          d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"/>
+      </svg>
+      <span>Fotos próximamente</span>
+    </div>`;
+  }
+
+  function renderCards(locales) {
+    if (!locales.length) {
+      grid.innerHTML = '<p class="sin-resultados">No se encontraron locales con los filtros seleccionados.</p>';
+      info.textContent = '';
+      return;
+    }
+
+    info.textContent = `${locales.length} local${locales.length !== 1 ? 'es' : ''} disponible${locales.length !== 1 ? 's' : ''}`;
+
+    grid.innerHTML = locales.map(p => {
+      const ubicTxt = [p.ciudad, p.barrio].filter(Boolean).join(' · ');
+      const waMsg = encodeURIComponent(
+        `Hola Lomacares, me interesa el Local Comercial en ${ubicTxt}. ¿Está disponible?`
+      );
+
+      return `
+        <div class="prop-card">
+          ${renderImagen(p.imagenes)}
+          <div class="card-header">
+            <div class="card-tipo">Local Comercial</div>
+            <div class="badge-estado ${badgeClase(p.estado)}">${p.estado}</div>
+          </div>
+          <div class="card-body">
+            <div class="card-ubicacion">${ubicTxt}</div>
+            <div class="card-meta">
+              <span>📐 ${p.metros_cuadrados} m²</span>
+              ${p.ubicacion ? `<span>📍 ${p.ubicacion}</span>` : ''}
+            </div>
+            ${p.descripcion ? `<div class="card-descripcion">${p.descripcion}</div>` : ''}
+          </div>
+          <div class="card-footer">
+            <div class="card-precio">
+              Gs. ${formatPrecio(p.precio_mensual)}
+              <span>por mes</span>
+            </div>
+            <a class="btn-consultar"
+               href="https://wa.me/595981000000?text=${waMsg}"
+               target="_blank">Consultar</a>
+          </div>
+        </div>`;
+    }).join('');
+  }
+
+  async function cargarLocales() {
+    grid.innerHTML = '<div class="estado-carga"><div class="spinner"></div><p>Cargando locales...</p></div>';
+
+    let query = db
+      .from('propiedades_mensuales')
+      .select('*')
+      .eq('tipo', 'Local Comercial')
+      .neq('estado', 'Alquilado')
+      .order('id', { ascending: false });
+
+    if (fEst.value)  query = query.eq('estado', fEst.value);
+    if (fCiud.value) query = query.ilike('ciudad', `%${fCiud.value}%`);
+    if (fM2.value)   query = query.gte('metros_cuadrados', parseFloat(fM2.value));
+
+    const { data, error } = await query;
+
+    if (error) {
+      grid.innerHTML = `<p class="sin-resultados">Error al cargar locales: ${error.message}</p>`;
+      return;
+    }
+
+    renderCards(data);
+  }
+
+  fEst.addEventListener('change', cargarLocales);
+
+  let debounceTimer;
+  fCiud.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(cargarLocales, 400);
+  });
+  fM2.addEventListener('input', () => {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(cargarLocales, 400);
+  });
+
+  document.getElementById('btn-limpiar').addEventListener('click', () => {
+    fEst.value  = '';
+    fCiud.value = '';
+    fM2.value   = '';
+    cargarLocales();
+  });
+
+  cargarLocales();
+</script>
+
+</body>
+</html>
