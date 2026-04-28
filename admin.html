@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin – Lomacares</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --verde:      #4a7c59;
+      --verde-claro:#6fa882;
+      --crema:      #f8f3eb;
+      --marron:     #3d2b1f;
+      --marron-med: #7a5c40;
+      --terracota:  #c4703a;
+      --rojo:       #c0392b;
+      --blanco:     #ffffff;
+      --gris-suave: #f0ebe0;
+      --texto:      #2c1f14;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Lato', sans-serif;
+      background: #f4efe6;
+      color: var(--texto);
+      min-height: 100vh;
+    }
+
+    /* ── TOPBAR ── */
+    .topbar {
+      background: var(--marron);
+      padding: 0 32px;
+      height: 60px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .topbar-title {
+      font-family: 'Playfair Display', serif;
+      color: var(--blanco);
+      font-size: 1.2rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+
+    .topbar-title span {
+      color: #c8b89a;
+      font-size: 0.8rem;
+      font-family: 'Lato', sans-serif;
+      font-weight: 400;
+      margin-left: 10px;
+    }
+
+    .topbar-link {
+      color: #c8b89a;
+      text-decoration: none;
+      font-size: 0.82rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      transition: color 0.2s;
+    }
+
+    .topbar-link:hover { color: #f5c87a; }
+
+    /* ── MAIN ── */
+    .main {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* ── TOOLBAR ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .toolbar h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: var(--marron);
+    }
+
+    .toolbar-actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .filter-select {
+      padding: 8px 14px;
+      border: 1.5px solid #c8b89a;
+      border-radius: 6px;
+      background: var(--blanco);
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      color: var(--texto);
+    }
+
+    .filter-select:focus { outline: none; border-color: var(--verde); }
+
+    /* ── BOTONES ── */
+    .btn {
+      padding: 9px 20px;
+      border: none;
+      border-radius: 6px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      letter-spacing: 0.04em;
+      transition: background 0.2s, transform 0.1s;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn-primary { background: var(--verde); color: var(--blanco); }
+    .btn-primary:hover { background: #3a6347; }
+    .btn-danger  { background: var(--rojo);  color: var(--blanco); padding: 6px 12px; font-size: 0.8rem; }
+    .btn-danger:hover  { background: #a93226; }
+    .btn-edit    { background: var(--marron-med); color: var(--blanco); padding: 6px 12px; font-size: 0.8rem; }
+    .btn-edit:hover    { background: #5e4530; }
+    .btn-secondary { background: transparent; border: 1.5px solid var(--marron-med); color: var(--marron-med); }
+    .btn-secondary:hover { background: var(--gris-suave); }
+
+    /* ── TABLA ── */
+    .table-wrap {
+      background: var(--blanco);
+      border-radius: 10px;
+      box-shadow: 0 2px 12px rgba(61,43,31,0.09);
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    thead th {
+      background: var(--gris-suave);
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--marron-med);
+      white-space: nowrap;
+      border-bottom: 2px solid #ddd5c5;
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f0ebe0;
+      transition: background 0.15s;
+    }
+
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #faf6f0; }
+
+    td {
+      padding: 12px 16px;
+      vertical-align: middle;
+      color: var(--texto);
+    }
+
+    .td-desc {
+      max-width: 260px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: #7a6550;
+      font-size: 0.85rem;
+    }
+
+    .td-precio { font-weight: 700; color: var(--verde); white-space: nowrap; }
+    .td-id     { color: #bbb; font-size: 0.8rem; }
+
+    .badge {
+      font-size: 0.7rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      padding: 3px 9px;
+      border-radius: 20px;
+      white-space: nowrap;
+    }
+
+    .badge.libre        { background: #d4edda; color: #1a6630; }
+    .badge.alquilado    { background: #f8d7da; color: #842029; }
+    .badge.a-liberarse  { background: #fff3cd; color: #7d5a00; }
+
+    .td-actions { display: flex; gap: 6px; white-space: nowrap; }
+
+    /* ── ESTADO CARGA ── */
+    .estado-tabla {
+      text-align: center;
+      padding: 48px;
+      color: var(--marron-med);
+    }
+
+    .spinner {
+      width: 32px; height: 32px;
+      border: 3px solid #d4c9b8;
+      border-top-color: var(--verde);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* ── MODAL ── */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30,18,8,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      background: var(--blanco);
+      border-radius: 12px;
+      width: 100%;
+      max-width: 680px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 8px 40px rgba(0,0,0,0.25);
+    }
+
+    .modal-header {
+      padding: 22px 28px 16px;
+      border-bottom: 1px solid var(--gris-suave);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-header h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      color: var(--marron);
+    }
+
+    .modal-close {
+      background: none;
+      border: none;
+      font-size: 1.4rem;
+      color: var(--marron-med);
+      cursor: pointer;
+      line-height: 1;
+      padding: 4px;
+    }
+
+    .modal-close:hover { color: var(--rojo); }
+
+    .modal-body { padding: 24px 28px; }
+
+    .modal-footer {
+      padding: 16px 28px 24px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      border-top: 1px solid var(--gris-suave);
+    }
+
+    /* ── FORM DENTRO DEL MODAL ── */
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .fg {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .fg label {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: var(--marron-med);
+    }
+
+    .fg input,
+    .fg select,
+    .fg textarea {
+      padding: 10px 13px;
+      border: 1.5px solid #d4c8b4;
+      border-radius: 6px;
+      font-family: 'Lato', sans-serif;
+      font-size: 0.93rem;
+      color: var(--texto);
+      background: var(--blanco);
+      transition: border-color 0.2s;
+      width: 100%;
+    }
+
+    .fg input:focus,
+    .fg select:focus,
+    .fg textarea:focus {
+      outline: none;
+      border-color: var(--verde);
+      box-shadow: 0 0 0 3px rgba(74,124,89,0.10);
+    }
+
+    .fg textarea { min-height: 90px; resize: vertical; }
+
+    .fg-note {
+      font-size: 0.75rem;
+      color: #a8937c;
+      margin-top: 2px;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ── CONFIRM DIALOG ── */
+    .confirm-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(30,18,8,0.6);
+      z-index: 300;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .confirm-backdrop.open { display: flex; }
+
+    .confirm-box {
+      background: var(--blanco);
+      border-radius: 10px;
+      padding: 32px;
+      max-width: 380px;
+      width: 90%;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .confirm-box h4 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.2rem;
+      color: var(--marron);
+      margin-bottom: 10px;
+    }
+
+    .confirm-box p {
+      font-size: 0.92rem;
+      color: var(--marron-med);
+      margin-bottom: 24px;
+    }
+
+    .confirm-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    /* ── TOAST ── */
+    .toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      z-index: 400;
+      padding: 13px 22px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: var(--blanco);
+      opacity: 0;
+      transform: translateY(12px);
+      transition: opacity 0.3s, transform 0.3s;
+      pointer-events: none;
+    }
+
+    .toast.show { opacity: 1; transform: translateY(0); }
+    .toast.success { background: var(--verde); }
+    .toast.error   { background: var(--rojo); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: 1; }
+      .topbar { padding: 0 16px; }
+      .main { padding: 20px 12px 60px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-title">
+    Lomacares
+    <span>Panel de Administración</span>
+  </div>
+  <a class="topbar-link" href="index.html">← Volver al sitio</a>
+</div>
+
+<div class="main">
+
+  <div class="toolbar">
+    <h2>Propiedades Mensuales</h2>
+    <div class="toolbar-actions">
+      <select class="filter-select" id="f-tipo">
+        <option value="">Todos los tipos</option>
+        <option value="Casa">Casa</option>
+        <option value="Departamento">Departamento</option>
+        <option value="Local Comercial">Local Comercial</option>
+      </select>
+      <select class="filter-select" id="f-estado">
+        <option value="">Todos los estados</option>
+        <option value="Libre">Libre</option>
+        <option value="A Liberarse">A Liberarse</option>
+        <option value="Alquilado">Alquilado</option>
+      </select>
+      <button class="btn btn-primary" id="btn-nueva">+ Nueva propiedad</button>
+    </div>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Tipo</th>
+          <th>Ciudad / Barrio</th>
+          <th>m²</th>
+          <th>Hab.</th>
+          <th>Precio mensual</th>
+          <th>Estado</th>
+          <th>Descripción</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody id="tabla-body">
+        <tr>
+          <td colspan="9">
+            <div class="estado-tabla">
+              <div class="spinner"></div>
+              <p>Cargando...</p>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p id="tabla-info" style="margin-top:12px; font-size:0.85rem; color:var(--marron-med);"></p>
+</div>
+
+<!-- ══ MODAL AGREGAR / EDITAR ══ -->
+<div class="modal-backdrop" id="modal-backdrop">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modal-titulo">Nueva propiedad</h3>
+      <button class="modal-close" id="modal-close">✕</button>
+    </div>
+    <div class="modal-body">
+      <form id="prop-form" novalidate>
+        <input type="hidden" id="f-id">
+        <div class="form-grid">
+
+          <div class="fg">
+            <label for="f-tipo-form">Tipo *</label>
+            <select id="f-tipo-form" required>
+              <option value="">Seleccionar...</option>
+              <option value="Casa">Casa</option>
+              <option value="Departamento">Departamento</option>
+              <option value="Local Comercial">Local Comercial</option>
+            </select>
+          </div>
+
+          <div class="fg">
+            <label for="f-estado-form">Estado *</label>
+            <select id="f-estado-form" required>
+              <option value="Libre">Libre</option>
+              <option value="A Liberarse">A Liberarse</option>
+              <option value="Alquilado">Alquilado</option>
+            </select>
+          </div>
+
+          <div class="fg">
+            <label for="f-ciudad-form">Ciudad *</label>
+            <input id="f-ciudad-form" type="text" placeholder="Ej: Asunción" required>
+          </div>
+
+          <div class="fg">
+            <label for="f-barrio-form">Barrio</label>
+            <input id="f-barrio-form" type="text" placeholder="Ej: Villa Morra">
+          </div>
+
+          <div class="fg">
+            <label for="f-m2-form">Metros cuadrados *</label>
+            <input id="f-m2-form" type="number" min="1" step="0.01" placeholder="Ej: 85" required>
+          </div>
+
+          <div class="fg" id="fg-hab">
+            <label for="f-hab-form">Habitaciones</label>
+            <input id="f-hab-form" type="number" min="1" max="20" placeholder="Ej: 3">
+            <span class="fg-note">Solo para Casa y Departamento</span>
+          </div>
+
+          <div class="fg">
+            <label for="f-precio-form">Precio mensual (Gs.) *</label>
+            <input id="f-precio-form" type="number" min="0" step="1000" placeholder="Ej: 3500000" required>
+          </div>
+
+          <div class="fg">
+            <label for="f-ubicacion-form">Ubicación</label>
+            <input id="f-ubicacion-form" type="text" placeholder="Ej: Av. España 1640">
+          </div>
+
+          <div class="fg full">
+            <label for="f-desc-form">Descripción</label>
+            <textarea id="f-desc-form" placeholder="Descripción libre de la propiedad..."></textarea>
+          </div>
+
+          <div class="fg full">
+            <label for="f-imgs-form">Imágenes (URLs separadas por coma)</label>
+            <input id="f-imgs-form" type="text" placeholder="https://... , https://...">
+            <span class="fg-note">Dejá vacío si no hay fotos todavía</span>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modal-cancelar">Cancelar</button>
+      <button class="btn btn-primary" id="modal-guardar">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ CONFIRM BORRAR ══ -->
+<div class="confirm-backdrop" id="confirm-backdrop">
+  <div class="confirm-box">
+    <h4>¿Borrar propiedad?</h4>
+    <p id="confirm-texto">Esta acción no se puede deshacer.</p>
+    <div class="confirm-actions">
+      <button class="btn btn-secondary" id="confirm-no">Cancelar</button>
+      <button class="btn btn-danger"    id="confirm-si">Borrar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TOAST ══ -->
+<div class="toast" id="toast"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const { createClient } = supabase;
+  const db = createClient(
+    'https://iydvgncngzszljzptljl.supabase.co',
+    'sb_publishable_b5FdnQ07CmEpc8BpxrSaaA__GPhxoS8'
+  );
+
+  // ── Estado local ──
+  let propiedades = [];
+  let editandoId  = null;
+  let borrandoId  = null;
+
+  // ── Elementos ──
+  const tablaBody     = document.getElementById('tabla-body');
+  const tablaInfo     = document.getElementById('tabla-info');
+  const fTipoFiltro   = document.getElementById('f-tipo');
+  const fEstFiltro    = document.getElementById('f-estado');
+  const modalBackdrop = document.getElementById('modal-backdrop');
+  const confirmBack   = document.getElementById('confirm-backdrop');
+  const toast         = document.getElementById('toast');
+
+  // ── Helpers ──
+  function formatPrecio(n) {
+    return 'Gs. ' + new Intl.NumberFormat('es-PY').format(n);
+  }
+
+  function badgeClase(estado) {
+    if (estado === 'Libre')      return 'libre';
+    if (estado === 'Alquilado')  return 'alquilado';
+    return 'a-liberarse';
+  }
+
+  function showToast(msg, tipo = 'success') {
+    toast.textContent = msg;
+    toast.className = `toast ${tipo} show`;
+    setTimeout(() => { toast.className = 'toast'; }, 3000);
+  }
+
+  // ── Cargar propiedades ──
+  async function cargar() {
+    tablaBody.innerHTML = `<tr><td colspan="9"><div class="estado-tabla"><div class="spinner"></div><p>Cargando...</p></div></td></tr>`;
+
+    let q = db.from('propiedades_mensuales').select('*').order('id', { ascending: false });
+    if (fTipoFiltro.value) q = q.eq('tipo', fTipoFiltro.value);
+    if (fEstFiltro.value)  q = q.eq('estado', fEstFiltro.value);
+
+    const { data, error } = await q;
+    if (error) {
+      tablaBody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--rojo)">Error: ${error.message}</td></tr>`;
+      return;
+    }
+
+    propiedades = data;
+    renderTabla();
+  }
+
+  function renderTabla() {
+    if (!propiedades.length) {
+      tablaBody.innerHTML = `<tr><td colspan="9" style="text-align:center;padding:40px;color:var(--marron-med)">No hay propiedades.</td></tr>`;
+      tablaInfo.textContent = '';
+      return;
+    }
+
+    tablaInfo.textContent = `${propiedades.length} propiedad${propiedades.length !== 1 ? 'es' : ''}`;
+
+    tablaBody.innerHTML = propiedades.map(p => {
+      const ubicacion = [p.ciudad, p.barrio].filter(Boolean).join(' · ');
+      return `
+        <tr>
+          <td class="td-id">#${p.id}</td>
+          <td><strong>${p.tipo}</strong></td>
+          <td>${ubicacion}</td>
+          <td>${p.metros_cuadrados} m²</td>
+          <td>${p.habitaciones ?? '—'}</td>
+          <td class="td-precio">${formatPrecio(p.precio_mensual)}</td>
+          <td><span class="badge ${badgeClase(p.estado)}">${p.estado}</span></td>
+          <td class="td-desc" title="${(p.descripcion || '').replace(/"/g,'&quot;')}">${p.descripcion || '—'}</td>
+          <td>
+            <div class="td-actions">
+              <button class="btn btn-edit"   onclick="abrirEditar(${p.id})">Editar</button>
+              <button class="btn btn-danger" onclick="pedirBorrar(${p.id})">Borrar</button>
+            </div>
+          </td>
+        </tr>`;
+    }).join('');
+  }
+
+  // ── Modal ──
+  function abrirModal(titulo) {
+    document.getElementById('modal-titulo').textContent = titulo;
+    modalBackdrop.classList.add('open');
+  }
+
+  function cerrarModal() {
+    modalBackdrop.classList.remove('open');
+    document.getElementById('prop-form').reset();
+    document.getElementById('f-id').value = '';
+    editandoId = null;
+    toggleHabitaciones();
+  }
+
+  function toggleHabitaciones() {
+    const tipo = document.getElementById('f-tipo-form').value;
+    const fg   = document.getElementById('fg-hab');
+    fg.classList.toggle('hidden', tipo === 'Local Comercial' || tipo === '');
+  }
+
+  document.getElementById('f-tipo-form').addEventListener('change', toggleHabitaciones);
+
+  document.getElementById('btn-nueva').addEventListener('click', () => {
+    editandoId = null;
+    abrirModal('Nueva propiedad');
+  });
+
+  document.getElementById('modal-close').addEventListener('click', cerrarModal);
+  document.getElementById('modal-cancelar').addEventListener('click', cerrarModal);
+  modalBackdrop.addEventListener('click', e => { if (e.target === modalBackdrop) cerrarModal(); });
+
+  function abrirEditar(id) {
+    const p = propiedades.find(x => x.id === id);
+    if (!p) return;
+    editandoId = id;
+
+    document.getElementById('f-id').value          = p.id;
+    document.getElementById('f-tipo-form').value    = p.tipo;
+    document.getElementById('f-estado-form').value  = p.estado;
+    document.getElementById('f-ciudad-form').value  = p.ciudad || '';
+    document.getElementById('f-barrio-form').value  = p.barrio || '';
+    document.getElementById('f-m2-form').value      = p.metros_cuadrados || '';
+    document.getElementById('f-hab-form').value     = p.habitaciones || '';
+    document.getElementById('f-precio-form').value  = p.precio_mensual || '';
+    document.getElementById('f-ubicacion-form').value = p.ubicacion || '';
+    document.getElementById('f-desc-form').value    = p.descripcion || '';
+    document.getElementById('f-imgs-form').value    = (p.imagenes || []).join(', ');
+
+    toggleHabitaciones();
+    abrirModal('Editar propiedad');
+  }
+
+  // ── Guardar (crear o editar) ──
+  document.getElementById('modal-guardar').addEventListener('click', async () => {
+    const tipo    = document.getElementById('f-tipo-form').value;
+    const ciudad  = document.getElementById('f-ciudad-form').value.trim();
+    const m2      = parseFloat(document.getElementById('f-m2-form').value);
+    const precio  = parseFloat(document.getElementById('f-precio-form').value);
+
+    if (!tipo || !ciudad || isNaN(m2) || isNaN(precio)) {
+      showToast('Completá los campos obligatorios (*)', 'error');
+      return;
+    }
+
+    const imgsRaw = document.getElementById('f-imgs-form').value.trim();
+    const imagenes = imgsRaw
+      ? imgsRaw.split(',').map(s => s.trim()).filter(Boolean)
+      : [];
+
+    const payload = {
+      tipo,
+      estado:           document.getElementById('f-estado-form').value,
+      ciudad,
+      barrio:           document.getElementById('f-barrio-form').value.trim() || null,
+      metros_cuadrados: m2,
+      habitaciones:     tipo !== 'Local Comercial'
+                          ? (parseInt(document.getElementById('f-hab-form').value) || null)
+                          : null,
+      precio_mensual:   precio,
+      ubicacion:        document.getElementById('f-ubicacion-form').value.trim() || null,
+      descripcion:      document.getElementById('f-desc-form').value.trim() || null,
+      imagenes,
+    };
+
+    const btn = document.getElementById('modal-guardar');
+    btn.disabled = true;
+    btn.textContent = 'Guardando...';
+
+    let error;
+    if (editandoId) {
+      ({ error } = await db.from('propiedades_mensuales').update(payload).eq('id', editandoId));
+    } else {
+      ({ error } = await db.from('propiedades_mensuales').insert(payload));
+    }
+
+    btn.disabled = false;
+    btn.textContent = 'Guardar';
+
+    if (error) {
+      showToast('Error: ' + error.message, 'error');
+      return;
+    }
+
+    showToast(editandoId ? 'Propiedad actualizada' : 'Propiedad creada');
+    cerrarModal();
+    cargar();
+  });
+
+  // ── Borrar ──
+  function pedirBorrar(id) {
+    borrandoId = id;
+    const p = propiedades.find(x => x.id === id);
+    const nombre = p ? `${p.tipo} en ${[p.ciudad, p.barrio].filter(Boolean).join(', ')}` : `#${id}`;
+    document.getElementById('confirm-texto').textContent = `¿Borrar "${nombre}"? Esta acción no se puede deshacer.`;
+    confirmBack.classList.add('open');
+  }
+
+  document.getElementById('confirm-no').addEventListener('click', () => {
+    confirmBack.classList.remove('open');
+    borrandoId = null;
+  });
+
+  document.getElementById('confirm-si').addEventListener('click', async () => {
+    if (!borrandoId) return;
+    confirmBack.classList.remove('open');
+
+    const { error } = await db.from('propiedades_mensuales').delete().eq('id', borrandoId);
+    borrandoId = null;
+
+    if (error) {
+      showToast('Error al borrar: ' + error.message, 'error');
+      return;
+    }
+
+    showToast('Propiedad eliminada');
+    cargar();
+  });
+
+  // ── Filtros ──
+  fTipoFiltro.addEventListener('change', cargar);
+  fEstFiltro.addEventListener('change', cargar);
+
+  // ── Init ──
+  cargar();
+</script>
+
+</body>
+</html>
